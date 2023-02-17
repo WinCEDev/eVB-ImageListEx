@@ -1,0 +1,236 @@
+VERSION 5.00
+Object = "{BE67ABF5-0137-11D2-9B8A-00C04FAD5AEC}#1.0#0"; "mscecommandbar.dll"
+Object = "{6556ED95-9838-11D1-80AE-00C04FAD5EFB}#1.0#0"; "mscelistview.dll"
+Object = "{01FC4473-8DE5-11D1-91B7-00C04FA87A04}#1.0#0"; "mscetabstrip.dll"
+Object = "{D863DA15-8C5B-11D1-86C0-00AA003EE054}#1.0#0"; "mscetreeview.dll"
+Begin VB.Form frmMain 
+   BorderStyle     =   0  'None
+   Caption         =   "ImageListEx Example Project"
+   ClientHeight    =   5415
+   ClientLeft      =   -60
+   ClientTop       =   -120
+   ClientWidth     =   8760
+   ScaleHeight     =   5415
+   ScaleWidth      =   8760
+   ShowInTaskbar   =   0   'False
+   WindowState     =   2  'Maximized
+   Begin CommandbarLib.CommandBar CommandBar 
+      Height          =   345
+      Left            =   0
+      TabIndex        =   0
+      Top             =   0
+      Width           =   2775
+      _cx             =   4895
+      _cy             =   600
+      Enabled         =   -1  'True
+      OKButton        =   0   'False
+      HelpButton      =   -1  'True
+      CloseButton     =   -1  'True
+   End
+   Begin CETabStripCtl.TabStrip TabStrip 
+      Height          =   375
+      Left            =   0
+      TabIndex        =   1
+      Top             =   360
+      Width           =   3375
+      _cx             =   5953
+      _cy             =   661
+      FontBold        =   0   'False
+      FontItalic      =   0   'False
+      FontStrikethru  =   0   'False
+      FontUnderline   =   0   'False
+      FontName        =   "Tahoma"
+      FontSize        =   8
+      MultiRow        =   0   'False
+      Style           =   0
+      TabFixedHeight  =   0
+      TabFixedWidth   =   0
+      TabWidthStyle   =   2
+      TabsPersist     =   $"frmMain.frx":0000
+      Enabled         =   -1  'True
+   End
+   Begin MSCELISTVIEWLibCtl.ListViewCtrl ListViewCtrl 
+      Height          =   1815
+      Left            =   0
+      TabIndex        =   2
+      Top             =   720
+      Width           =   2175
+      _cx             =   3836
+      _cy             =   3201
+      FontBold        =   0   'False
+      FontItalic      =   0   'False
+      FontName        =   "Tahoma"
+      FontSize        =   8
+      FontStrikethrough=   0   'False
+      FontUnderline   =   0   'False
+      HideColumnHeaders=   0   'False
+      HideSelection   =   -1  'True
+      LabelEdit       =   0
+      LabelWrap       =   0   'False
+      MultiSelect     =   0   'False
+      Sorted          =   0   'False
+      SortKey         =   0
+      SortOrder       =   0
+      View            =   0
+      Enabled         =   -1  'True
+   End
+   Begin MSCETREEVIEWLibCtl.TreeViewCtl TreeViewCtl 
+      Height          =   1815
+      Left            =   2280
+      TabIndex        =   3
+      Top             =   720
+      Width           =   2055
+      _cx             =   3625
+      _cy             =   3201
+      FontBold        =   0   'False
+      FontItalic      =   0   'False
+      FontName        =   "Arial"
+      FontSize        =   8
+      FontStrikethrough=   0   'False
+      FontUnderline   =   0   'False
+      HideSelection   =   -1  'True
+      Indentation     =   0
+      LabelEdit       =   0
+      LineStyle       =   0
+      PathSeparator   =   "\"
+      Style           =   7
+      Enabled         =   -1  'True
+   End
+End
+Attribute VB_Name = "frmMain"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Option Explicit
+
+Private CommandBarIcons As Long 'Holds the CommandBar icons.
+
+Private ListViewIcons   As Long 'Holds the ListView icons.
+
+Private TabStripIcons   As Long 'Holds the TabStrip icons.
+
+Private TreeViewIcons   As Long 'Holds the TreeView icons.
+
+Private Sub PopulateCommandBar()
+
+    CommandBarIcons = ImageListEx_Create(16, 16, ILC_COLOR Or ILC_MASK)
+
+    ImageListEx_AddMasked CommandBarIcons, PathHelpers_AddPathSeparator(App.Path) & "toolbar.bmp", vbMagenta
+
+    CommandBar.ImageList = CommandBarIcons
+
+    'Populate with some dummy data.
+    Dim objButton As CommandBarButton
+
+    Dim i         As Long
+
+    For i = 0 To ImageListEx_GetImageCount(CommandBarIcons) - 1
+
+        Set objButton = CommandBar.Controls.Add(cbrButton)
+        objButton.Image = i
+
+    Next
+
+End Sub
+
+Private Sub PopulateListView()
+
+    ListViewIcons = ImageListEx_Create(32, 32, ILC_COLOR Or ILC_MASK)
+
+    ImageListEx_AddMasked ListViewIcons, PathHelpers_AddPathSeparator(App.Path) & "listview.bmp", vbMagenta
+
+    ListViewCtrl.Icons = ListViewIcons
+
+    'Populate with some dummy data.
+    Dim i As Long
+
+    For i = 1 To 4
+        ListViewCtrl.ListItems.Add , , "Test Item " & i, i
+    Next
+
+End Sub
+
+Private Sub PopulateTabStrip()
+
+    'Tabs have been created in the designer.
+    TabStripIcons = ImageListEx_Create(16, 16, ILC_COLOR Or ILC_MASK)
+    ImageListEx_AddMasked TabStripIcons, PathHelpers_AddPathSeparator(App.Path) & "tabstrip.bmp", vbMagenta
+
+    TabStrip.ImageList = TabStripIcons
+
+End Sub
+
+Private Sub PopulateTreeView()
+
+    TreeViewIcons = ImageListEx_Create(16, 16, ILC_COLOR Or ILC_MASK)
+
+    ImageListEx_AddMasked TreeViewIcons, PathHelpers_AddPathSeparator(App.Path) & "treeview.bmp", vbMagenta
+
+    TreeViewCtl.ImageList = TreeViewIcons
+
+    Dim objRoot As Node
+
+    Set objRoot = TreeViewCtl.Nodes.Add(, , "Root", "Root Node", 1)
+
+    Dim objChild As Node
+
+    Set objChild = TreeViewCtl.Nodes.Add("Root", tvwChild, "Child1", "Child node 1", 2)
+
+    Set objChild = TreeViewCtl.Nodes.Add("Root", tvwChild, "Child2", "Child node 2", 2)
+    Set objChild = TreeViewCtl.Nodes.Add("Root", tvwChild, "Child3", "Child node 3", 2)
+    Set objChild = TreeViewCtl.Nodes.Add("Root", tvwChild, "Child4", "Child node 4", 2)
+    Set objChild = TreeViewCtl.Nodes.Add("Root", tvwChild, "Child5", "Child node 5", 2)
+    
+    TreeViewCtl.FontName = "Tahoma"
+
+    objRoot.Expanded = True
+End Sub
+
+Private Sub Form_Load()
+    PopulateCommandBar
+    PopulateListView
+    PopulateTabStrip
+    PopulateTreeView
+End Sub
+
+Private Sub Form_Resize()
+
+    On Error Resume Next
+
+    CommandBar.Width = ScaleWidth
+    TabStrip.Width = ScaleWidth
+    
+    ListViewCtrl.Move 0, TabStrip.Top + TabStrip.Height, ScaleWidth, ScaleHeight - (TabStrip.Top + TabStrip.Height)
+    TreeViewCtl.Move 0, TabStrip.Top + TabStrip.Height, ScaleWidth, ScaleHeight - (TabStrip.Top + TabStrip.Height)
+
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    ImageListEx_Destroy CommandBarIcons
+    ImageListEx_Destroy ListViewIcons
+    ImageListEx_Destroy TabStripIcons
+    ImageListEx_Destroy TreeViewIcons
+End Sub
+
+Private Sub TabStrip_Click()
+
+    Select Case TabStrip.SelectedItem.Key
+
+        Case "ListView"
+
+            ListViewCtrl.Visible = True
+            TreeViewCtl.Visible = False
+
+        Case "TreeView"
+
+            TreeViewCtl.Visible = True
+            ListViewCtrl.Visible = False
+
+    End Select
+
+    Form_Resize
+
+End Sub
+
+
