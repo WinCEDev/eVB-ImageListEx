@@ -40,3 +40,10 @@ Private Sub Form_Unload(Cancel As Integer)
     ImageListEx_Destroy CommandBarIcons
 End Sub
 ```
+
+## Screenshots
+
+
+![Screenshot showing the example application in the Maple color scheme.](https://github.com/WinCEDev/eVB-ImageListEx/blob/main/Screenshots/CAPT0000.png?raw=1)
+
+![Screenshot showing the example application in the Spruce color scheme.](https://github.com/WinCEDev/eVB-ImageListEx/blob/main/Screenshots/CAPT0001.png?raw=1)
